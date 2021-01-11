@@ -22,12 +22,16 @@ public class ModifyManaAction extends BaseSpellAction
 {
     private int mana;
     private boolean fillMana;
+    private int secondaryMana;
+    private boolean fillSecondaryMana;
 
     @Override
     public void prepare(CastContext context, ConfigurationSection parameters) {
         super.prepare(context, parameters);
         mana = parameters.getInt("mana", 1);
         fillMana = parameters.getBoolean("fill_mana", false);
+        secondaryMana = parameters.getInt("secondary_mana", 1);
+        fillSecondaryMana = parameters.getBoolean("fill_secondary_mana", false);
     }
 
     @Override
@@ -58,6 +62,10 @@ public class ModifyManaAction extends BaseSpellAction
         if (mana < 0 && currentMana <= 0) {
             return SpellResult.NO_TARGET;
         }
+        double currentSecondaryMana = caster.getSecondaryMana();
+        if (secondaryMana < 0 && currentSecondaryMana <= 0) {
+            return SpellResult.NO_TARGET;
+        }
         int manaMax = caster.getEffectiveManaMax();
         if (mana > 0 && currentMana >= manaMax) {
             return SpellResult.NO_TARGET;
@@ -67,7 +75,13 @@ public class ModifyManaAction extends BaseSpellAction
         } else {
             currentMana = Math.min(Math.max(0, currentMana + mana), manaMax);
         }
+        if (fillSecondaryMana) {
+            currentSecondaryMana = secondaryMana;
+        } else {
+            currentSecondaryMana = Math.min(Math.max(0, currentSecondaryMana + mana), secondaryMana);
+        }
         caster.setMana((float)currentMana);
+        caster.setSecondaryMana((float)currentSecondaryMana);
         mage.updateMana();
         return SpellResult.CAST;
     }
@@ -83,6 +97,9 @@ public class ModifyManaAction extends BaseSpellAction
     public void getParameterOptions(Spell spell, String parameterKey, Collection<String> examples)
     {
         if (parameterKey.equals("mana")) {
+            examples.addAll(Arrays.asList(BaseSpell.EXAMPLE_INTEGERS));
+        }
+        if (parameterKey.equals("secondary_mana")) {
             examples.addAll(Arrays.asList(BaseSpell.EXAMPLE_INTEGERS));
         } else {
             super.getParameterOptions(spell, parameterKey, examples);

@@ -345,6 +345,26 @@ public class HeroesManager implements ManaController, AttributeProvider, TeamPro
         hero.setMana((int)amount);
     }
 
+    @Override
+    public float getSecondaryMana(Player player) {
+        return 0;
+    }
+
+    @Override
+    public int getMaxSecondaryMana(Player player) {
+        return 0;
+    }
+
+    @Override
+    public void removeSecondaryMana(Player player, float amount) {
+
+    }
+
+    @Override
+    public void setSecondaryMana(Player player, float amount) {
+
+    }
+
     public boolean isInParty(Player source, Player check, boolean pvpCheck) {
         Hero sourceHero = getHero(source);
         Hero checkHero = getHero(check);

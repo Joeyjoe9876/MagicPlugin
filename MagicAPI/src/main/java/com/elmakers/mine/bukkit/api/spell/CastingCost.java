@@ -43,6 +43,20 @@ public interface CastingCost extends Cost {
      * @return The Mana amount cost
      */
     int getMana(CostReducer reducer);
+    /**
+     * Returns the raw Secondarymana cost.
+     *
+     * @return The raw secondaryMana cost, without reduction.
+     */
+    int getSecondaryMana();
+
+    /**
+     * Returns the Secondary_Mana amount to deduct
+     *
+     * @param reducer The CostReducer to use to calculate costs
+     * @return The Mana amount cost
+     */
+    int getSecondaryMana(CostReducer reducer);
 
     /**
      * Check to see if a given spell cast should succeed, given that

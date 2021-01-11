@@ -1398,8 +1398,13 @@ public class CastContext extends WandEffectContext implements com.elmakers.mine.
             command = command.replace(prefix + entry.getKey(), entry.getValue());
         }
 
-        command = mage.parameterize(command, prefix);
-        command = command.replace(prefix + "spell", getSpell().getName());
+        command = command
+                .replace(prefix + "_", " ")
+                .replace(prefix + "spell", getSpell().getName())
+                .replace(prefix + "pd", mage.getDisplayName())
+                .replace(prefix + "pn", mage.getName())
+                .replace(prefix + "uuid", mage.getId())
+                .replace(prefix + "p", mage.getName());
 
         if (location != null) {
             command = command

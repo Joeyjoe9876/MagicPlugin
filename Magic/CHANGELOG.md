@@ -7,13 +7,8 @@
  - Use Vanish for Cloak and Decoy spells
  - Re-work appraiser NPC shop, re-balance emerald/diamond/gold/iron prices
  - Some potter wand upgrades changed keys to include `_upgrade` and not  conflict with survival wands (e.g staff_upgrade)
- - Added staff-only `admintool` wand, a set of useful tools for admins
- - Fix issues with Teleport action when target contact has been changed
 
 # 8.2.3
-
- - Fix wand cast overrides not working for boolean or numeric values
- - Fix some specific issues with overlapping casts
 
 # 8.2.2
 

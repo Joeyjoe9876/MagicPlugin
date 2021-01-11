@@ -220,6 +220,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
     private float powerMultiplier = 1;
     private float earnMultiplier = 1;
     private float manaMaxBoost = 0;
+    private float secondaryManaMaxBoost = 0;
     private float manaRegenerationBoost = 0;
 
     private boolean costFree = false;
@@ -366,6 +367,10 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
 
     public boolean usesMana() {
         return activeWand == null ? false : activeWand.usesMana();
+    }
+
+    public boolean usesSecondaryMana() {
+        return activeWand == null ? false : activeWand.usesSecondaryMana();
     }
 
     @Override
@@ -1875,21 +1880,9 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         int updated = 0;
         for (Iterator<Batch> iterator = pendingBatches.iterator(); iterator.hasNext();) {
             Batch batch = iterator.next();
-            int batchUpdated = 0;
-            boolean errored = false;
-            try {
-                batchUpdated = batch.process(Math.max(1, maxWorldAllowed - updated));
-            } catch (Exception ex) {
-                errored = true;
-                controller.getLogger().log(Level.SEVERE, "Error processing batch: " + batch, ex);
-                try {
-                    batch.finish();
-                } catch (Exception finishEx) {
-                    controller.getLogger().log(Level.SEVERE, " Additional error force-finishing batch", finishEx);
-                }
-            }
+            int batchUpdated = batch.process(Math.max(1, maxWorldAllowed - updated));
             updated += batchUpdated;
-            if (batch.isFinished() || errored) {
+            if (batch.isFinished()) {
                 iterator.remove();
             }
         }
@@ -2956,6 +2949,10 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         return getActiveProperties().getMana();
     }
 
+    public float getSecondaryMana() {
+        return getActiveProperties().getSecondaryMana();
+    }
+
     @Override
     public int getManaMax() {
         return getActiveProperties().getManaMax();
@@ -2974,6 +2971,10 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
     @Override
     public void updateMana() {
         getActiveProperties().updateMana();
+    }
+
+    public void updateSecondaryMana() {
+        getActiveProperties().updateSecondaryMana();
     }
 
     @Override
@@ -3884,6 +3885,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         earnMultiplier = (float) (earnMultiplier * properties.getDouble("earn_multiplier", properties.getDouble("sp_multiplier", 1.0)));
         manaRegenerationBoost += properties.getFloat("mana_regeneration_boost", 0);
         manaMaxBoost += properties.getFloat("mana_max_boost", 0);
+        secondaryManaMaxBoost += properties.getFloat("secondary_mana_max_boost", 0);
 
         boolean stack = properties.getBoolean("stack", false);
         addPassiveEffectsGroup(protection, properties, "protection", stack, 1.0);
@@ -4014,6 +4016,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         costReduction = 0;
         consumeReduction = 0;
         manaMaxBoost = 0;
+        secondaryManaMaxBoost = 0;
         manaRegenerationBoost = 0;
 
         List<PotionEffectType> currentEffects = new ArrayList<>(effectivePotionEffects.keySet());
@@ -4228,6 +4231,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
             }
 
             activeWand.updateMana();
+            activeWand.updateSecondaryMana();
         }
     }
 
@@ -4302,6 +4306,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
                 endInstructions();
             }
             activeWand.updateMana();
+            activeWand.updateSecondaryMana();
         }
     }
 
@@ -4658,6 +4663,9 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
             }
             case "mana": {
                 return (double)getMana();
+            }
+            case "secondary_mana": {
+                return (double)getSecondaryMana();
             }
             case "mana_max": {
                 return (double)getEffectiveManaMax();
@@ -5118,6 +5126,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         return 1.0f + manaMaxBoost;
     }
 
+
     public float getManaRegenerationMultiplier() {
         return 1.0f + manaRegenerationBoost;
     }
@@ -5218,22 +5227,5 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
         }
 
         return false;
-    }
-
-    @Override
-    public String parameterize(String command, String prefix) {
-        Player player = getPlayer();
-        if (player != null) {
-            command = controller.setPlaceholders(player, command);
-        }
-
-        command = command
-                .replace(prefix + "_", " ")
-                .replace(prefix + "pd", getDisplayName())
-                .replace(prefix + "pn", getName())
-                .replace(prefix + "uuid", getId())
-                .replace(prefix + "p", getName());
-
-        return command;
     }
 }

@@ -107,6 +107,26 @@ public class SkillAPIManager implements ManaController, AttributeProvider, Requi
         playerData.setMana(amount);
     }
 
+    @Override
+    public float getSecondaryMana(Player player) {
+        return 0;
+    }
+
+    @Override
+    public int getMaxSecondaryMana(Player player) {
+        return 0;
+    }
+
+    @Override
+    public void removeSecondaryMana(Player player, float amount) {
+
+    }
+
+    @Override
+    public void setSecondaryMana(Player player, float amount) {
+
+    }
+
     public boolean hasSkill(Player player, String name) {
         PlayerData playerData = SkillAPI.getPlayerData(player);
         return playerData.hasSkill(name);

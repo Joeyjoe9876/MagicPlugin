@@ -82,8 +82,10 @@ public class WandUpgradePath implements com.elmakers.mine.bukkit.api.wand.WandUp
 
     private int maxUses = 500;
     private int maxMaxMana = 0;
+    private int maxMaxSecondaryMana = 0;
     private int maxManaRegeneration = 0;
     private int maxMana = 0;
+    private int maxSecondaryMana = 0;
     private int manaRegeneration = 0;
 
     private Map<String, Double> maxProperties = new HashMap<>();
@@ -100,6 +102,7 @@ public class WandUpgradePath implements com.elmakers.mine.bukkit.api.wand.WandUp
         this.key = key;
         this.levels = inherit.levels;
         this.maxMaxMana = inherit.maxMaxMana;
+        this.maxMaxSecondaryMana = inherit.maxMaxSecondaryMana;
         this.maxManaRegeneration = inherit.maxManaRegeneration;
         this.maxProperties.putAll(inherit.maxProperties);
         this.minLevel = inherit.minLevel;
@@ -110,6 +113,7 @@ public class WandUpgradePath implements com.elmakers.mine.bukkit.api.wand.WandUp
         this.icon = inherit.icon;
         this.migrateIcon = inherit.migrateIcon;
         this.maxMana = inherit.maxMana;
+        this.maxSecondaryMana = inherit.maxSecondaryMana;
         this.manaRegeneration = inherit.manaRegeneration;
         this.upgradeBroadcast = inherit.upgradeBroadcast;
         effects.putAll(inherit.effects);
@@ -220,8 +224,10 @@ public class WandUpgradePath implements com.elmakers.mine.bukkit.api.wand.WandUp
         // Fetch overall limits
         maxUses = template.getInt("max_uses", maxUses);
         maxMaxMana = template.getInt("max_mana", maxMaxMana);
+        maxMaxSecondaryMana = template.getInt("max_secondary_mana", maxMaxSecondaryMana);
         maxManaRegeneration = template.getInt("max_mana_regeneration", maxManaRegeneration);
         maxMana = template.getInt("mana_max", maxMana);
+        maxSecondaryMana = template.getInt("secondary_mana_max", maxSecondaryMana);
         manaRegeneration = template.getInt("mana_regeneration", manaRegeneration);
 
         minLevel = template.getInt("min_enchant_level", minLevel);
@@ -393,6 +399,10 @@ public class WandUpgradePath implements com.elmakers.mine.bukkit.api.wand.WandUp
 
     public int getMaxMaxMana() {
         return maxMaxMana;
+    }
+
+    public int getMaxMaxSecondaryMana() {
+        return maxMaxSecondaryMana;
     }
 
     public int getMaxManaRegeneration() {

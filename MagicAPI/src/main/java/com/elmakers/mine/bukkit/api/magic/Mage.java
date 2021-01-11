@@ -481,13 +481,17 @@ public interface Mage extends CostReducer, CooldownReducer {
     void giveExperience(int xp);
 
     void removeMana(float mana);
+    void removeSecondaryMana(float secondaryMana);
     float getMana();
+    float getSecondaryMana();
     int getManaMax();
     int getEffectiveManaMax();
     void setMana(float mana);
+    void setSecondaryMana(float secondaryMana);
     int getManaRegeneration();
     int getEffectiveManaRegeneration();
     void updateMana();
+    void updateSecondaryMana();
 
     int getLevel();
     void setLevel(int level);
@@ -782,5 +786,4 @@ public interface Mage extends CostReducer, CooldownReducer {
     boolean isUrlIconsEnabled();
     boolean canUse(ItemStack item);
     boolean canCraft(String recipeKey);
-    String parameterize(String command, String prefix);
 }

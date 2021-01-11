@@ -335,6 +335,9 @@ public class Cost implements com.elmakers.mine.bukkit.api.item.Cost {
     private boolean isMana() {
         return currency != null && currency.getKey().equals("mana");
     }
+    private boolean isSecondaryMana() {
+        return currency != null && currency.getKey().equals("secondary_mana");
+    }
 
     @Deprecated
     public int getXP(CostReducer reducer)
@@ -345,6 +348,11 @@ public class Cost implements com.elmakers.mine.bukkit.api.item.Cost {
     public int getMana(CostReducer reducer)
     {
         return isMana() ? getRoundedCost(amount, reducer) : 0;
+    }
+
+    public int getSecondaryMana(CostReducer reducer)
+    {
+        return isSecondaryMana() ? getRoundedCost(amount, reducer) : 0;
     }
 
     public void setAmount(double amount) {

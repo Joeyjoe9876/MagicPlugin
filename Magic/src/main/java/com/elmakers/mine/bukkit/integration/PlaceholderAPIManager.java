@@ -78,6 +78,8 @@ public class PlaceholderAPIManager extends PlaceholderExpansion {
                 return Integer.toString((int)casterProperties.getMana());
             case "mana_max":
                 return Integer.toString(casterProperties.getManaMax());
+            case "secondary_mana":
+                return Integer.toString((int)casterProperties.getSecondaryMana());
             case "sp":
                 return Integer.toString(mage.getSkillPoints());
             case "spell_count":

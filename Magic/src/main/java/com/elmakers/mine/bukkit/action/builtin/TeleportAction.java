@@ -104,7 +104,7 @@ public class TeleportAction extends BaseTeleportAction
 
             context.getMage().sendDebugMessage(ChatColor.GREEN + "Teleporting to block: " + TextUtils.printBlock(target) + ChatColor.GREEN + " face: " + TextUtils.printBlock(face), 12);
 
-            World world = face.getWorld();
+            World world = context.getWorld();
             Block destination = face;
             int verticalSearchDistance = context.getVerticalSearchDistance();
 

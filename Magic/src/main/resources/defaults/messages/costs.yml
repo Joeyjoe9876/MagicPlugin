@@ -4,6 +4,8 @@ costs:
     levels_amount: $amount XP Levels
     mana_amount: $amount Mana
     mana: Mana
+    secondary_mana_amount: $amount Secondary_Mana
+    secondary_mana: Secondary_Mana
     xp: XP
     levels: Levels
     sp: Spell Points

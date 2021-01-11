@@ -8,4 +8,8 @@ public interface ManaController {
     float getMana(Player player);
     void removeMana(Player player, float amount);
     void setMana(Player player, float amount);
+
+    float getSecondaryMana(Player player);
+    void removeSecondaryMana(Player player, float amount);
+    void setSecondaryMana(Player player, float amount);
 }

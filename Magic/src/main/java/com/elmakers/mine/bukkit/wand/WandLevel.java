@@ -34,6 +34,7 @@ public class WandLevel {
 
     private Deque<WeightedPair<Integer>> manaRegenerationProbability = new ArrayDeque<>();
     private Deque<WeightedPair<Integer>> manaMaxProbability = new ArrayDeque<>();
+    private Deque<WeightedPair<Integer>> secondaryManaMaxProbability = new ArrayDeque<>();
 
     protected WandLevel(WandUpgradePath path, MageController controller, ConfigurationSection template, int levelIndex, int nextLevelIndex, float distance) {
         this.path = path;
@@ -307,8 +308,10 @@ public class WandLevel {
                 addedProperties = true;
             }
 
+
             // Refill the wand's mana, why not
             upgradeProperties.set("mana", manaMax);
+            upgradeProperties.set("secondary_mana", 500);
         }
 
         // Add or set uses to wands

@@ -51,4 +51,7 @@ public class CastingCost extends Cost implements com.elmakers.mine.bukkit.api.sp
     public int getMana() {
         return getMana(null);
     }
+    public int getSecondaryMana() {
+        return getSecondaryMana(null);
+    }
 }

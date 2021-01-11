@@ -30,6 +30,9 @@ public interface CasterProperties extends MagicConfigurable {
     int getEffectiveManaMax();
     void setMana(float mana);
     void setManaMax(int manaMax);
+    void removeSecondaryMana(float secondaryMana);
+    float getSecondaryMana();
+    void setSecondaryMana(float secondaryMana);
     int getManaRegeneration();
     int getEffectiveManaRegeneration();
     void setManaRegeneration(int manaRegeneration);

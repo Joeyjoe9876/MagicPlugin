@@ -123,6 +123,16 @@ public abstract class ParentedProperties extends TemplatedProperties {
     }
 
     @Override
+    public boolean tickSecondaryMana() {
+        ParentedProperties parent = getParent();
+        if (!hasOwnSecondaryMana() && parent != null) {
+            return parent.tickSecondaryMana();
+        }
+
+        return super.tickSecondaryMana();
+    }
+
+    @Override
     public void loadProperties() {
         ParentedProperties parent = getParent();
         if (parent != null) {
@@ -184,5 +194,19 @@ public abstract class ParentedProperties extends TemplatedProperties {
         }
 
         return super.updateMaxMana(mage);
+    }
+
+    public boolean updateMaxSecondaryMana(Mage mage) {
+        if (!hasOwnSecondaryMana()) {
+            boolean modified = false;
+            ParentedProperties parent = getParent();
+            if (parent != null) {
+                modified = parent.updateMaxSecondaryMana(mage);
+                effectiveSecondaryManaMax = parent.getEffectiveSecondaryManaMax();
+            }
+            return modified;
+        }
+
+        return super.updateMaxSecondaryMana(mage);
     }
 }

@@ -143,8 +143,15 @@ public interface Wand extends CostReducer, CooldownReducer, CasterProperties {
     @Override
     void setManaMax(int manaMax);
     @Override
+    void removeSecondaryMana(float secondaryMana);
+    @Override
+    float getSecondaryMana();
+    @Override
+    void setSecondaryMana(float secondaryMana);
+    @Override
     int getManaRegeneration();
     void updateMana();
+    void updateSecondaryMana();
     @Override
     WandUpgradePath getPath();
     @Override

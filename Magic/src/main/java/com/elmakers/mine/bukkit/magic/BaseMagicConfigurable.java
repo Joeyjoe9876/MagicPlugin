@@ -459,6 +459,7 @@ public abstract class BaseMagicConfigurable extends BaseMagicProperties implemen
 
             // Mana modifiers don't need to apply if cost-free
             case "mana":
+            case "secondary_mana":
             case "mana_regeneration":
             case "mana_max":
             case "mana_per_damage":

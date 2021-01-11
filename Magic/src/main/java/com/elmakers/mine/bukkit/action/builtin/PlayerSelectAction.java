@@ -20,6 +20,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elmakers.mine.bukkit.action.CompoundAction;
@@ -40,7 +41,6 @@ public class PlayerSelectAction extends CompoundAction implements GUIAction
     private WeakReference<Player> target = null;
     private String ignorePlayersKey;
     private String titleKey;
-    private String nameTemplate;
 
     @Override
     public void deactivated() {
@@ -88,7 +88,6 @@ public class PlayerSelectAction extends CompoundAction implements GUIAction
         allowCrossWorld = parameters.getBoolean("cross_world", true);
         ignorePlayersKey = parameters.getString("ignore_key");
         titleKey = parameters.getString("title_key", "title");
-        nameTemplate = parameters.getString("name_template", "@p");
     }
 
     @Override
@@ -147,7 +146,7 @@ public class PlayerSelectAction extends CompoundAction implements GUIAction
         }
         if (players.size() == 0) return SpellResult.NO_TARGET;
 
-        String inventoryTitle = context.getMessage(titleKey, "Select Player");
+        String inventoryTitle = context.getMessage("title", "Select Player");
         int invSize = ((players.size() + 9) / 9) * 9;
         Inventory displayInventory = CompatibilityUtils.createInventory(null, invSize, inventoryTitle);
         for (Map.Entry<Integer, WeakReference<Player>> entry : players.entrySet())
@@ -155,10 +154,18 @@ public class PlayerSelectAction extends CompoundAction implements GUIAction
             Player targetPlayer = entry.getValue().get();
             if (targetPlayer == null) continue;
 
-            Mage targetMage = controller.getMage(targetPlayer);
-            String displayName = targetMage.parameterize(nameTemplate, "@");
+            String name = targetPlayer.getName();
+            String displayName = targetPlayer.getDisplayName();
 
             ItemStack playerItem = controller.getSkull(targetPlayer, displayName);
+            ItemMeta meta = playerItem.getItemMeta();
+            if (!name.equals(displayName))
+            {
+                List<String> lore = new ArrayList<>();
+                lore.add(name);
+                meta.setLore(lore);
+            }
+            playerItem.setItemMeta(meta);
             displayInventory.setItem(entry.getKey(), playerItem);
         }
         active = true;

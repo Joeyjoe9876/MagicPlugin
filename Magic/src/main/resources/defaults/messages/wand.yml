@@ -39,6 +39,7 @@ wand:
     upgrade_material_count: Adds $count Materials
     mana_max: "&eMana: $amount"
     mana_amount: "&eMana: $amount"
+    secondary_mana_amount: "&eSecondary_Mana: $amount"
     mana_amount_boosted: "&eMana: $amount &f(&b$mana&f)"
     mana_regeneration: "&eMana Regeneration: $amount/s"
     mana_per_damage: "&eMana Rage: $amount/HP"
@@ -152,6 +153,7 @@ wand:
     upgraded_property: "&r&dYou have been upgraded to &r&b$name"
     spell_progression: "&r&6$name &d&ohas progressed to &3$level&d&o/&3$max_level"
     mana_added: "&r&dYou now have $value mana"
+    secondary_mana_added: "&r&dYou now have $value secondary_mana"
     hotbar_count: "$amount hotbars"
     player_upgraded: $name's wand upgraded
     player_not_upgraded: $name's wand not upgraded
@@ -241,6 +243,8 @@ wand:
       &8| &7> &6Swing &fyour &a$wand &fto cast &d$spell
     mana_instructions: |-
       &8| &7> &fSpells require &6mana &fto cast, shown in the &5XP bar
+    secondary_mana_instructions: |-
+      &8| &7> &fSpells require &6mana &fto reload, shown in the &5scoreboard
     enchant_instructions: |-
       &8| &7> &fEarn &6Spell Points &fby casting spells
       &8| &7> &fLearn new spells by using &6SP &fat an &eenchanting table

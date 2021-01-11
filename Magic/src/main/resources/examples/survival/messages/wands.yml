@@ -434,6 +434,3 @@ wands:
       spell_aura: ""
     iceskates:
       name: Ice Skates
-    admintool:
-        name: Admin Tool
-        description: A variety of useful tools for mods and admins

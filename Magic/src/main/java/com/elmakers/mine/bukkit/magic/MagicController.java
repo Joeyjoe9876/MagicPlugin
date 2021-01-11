@@ -691,6 +691,10 @@ public class MagicController implements MageController {
         return maxMana;
     }
 
+    public int getMaxSecondaryMana() {
+        return maxSecondaryMana;
+    }
+
     public int getMaxManaRegeneration() {
         return maxManaRegeneration;
     }
@@ -3130,6 +3134,7 @@ public class MagicController implements MageController {
         maxCostReduction = (float)properties.getDouble("max_cost_reduction", maxCostReduction);
         maxCooldownReduction = (float)properties.getDouble("max_cooldown_reduction", maxCooldownReduction);
         maxMana = properties.getInt("max_mana", maxMana);
+        maxSecondaryMana = properties.getInt("max_secondary_mana", maxSecondaryMana);
         maxManaRegeneration = properties.getInt("max_mana_regeneration", maxManaRegeneration);
         worthSkillPoints = properties.getDouble("worth_sp", 1);
         skillPointIcon = properties.getString("sp_item_icon_url");
@@ -7400,6 +7405,7 @@ public class MagicController implements MageController {
     private float                                maxCostReduction                 = 0.5f;
     private float                                maxCooldownReduction            = 0.5f;
     private int                                    maxMana                            = 1000;
+    private int                                    maxSecondaryMana                            = 64;
     private int                                    maxManaRegeneration                = 100;
     private double                              worthBase                       = 1;
     private double                              worthSkillPoints                = 1;

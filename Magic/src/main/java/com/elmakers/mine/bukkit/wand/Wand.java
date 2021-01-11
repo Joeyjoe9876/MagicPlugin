@@ -208,6 +208,7 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
     private boolean limitSpellsToPath = false;
     private boolean limitBrushesToPath = false;
     private Double resetManaOnActivate = null;
+    private Double resetSecondaryManaOnActivate = null;
     private Currency currencyDisplay = null;
 
     private float manaPerDamage = 0;
@@ -723,6 +724,11 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
         if (isCostFree()) return false;
         return getManaMax() > 0 || (isHeroes && mage != null);
     }
+    @Override
+    public boolean usesSecondaryMana() {
+        if (isCostFree()) return false;
+        return true;
+    }
 
     @Override
     public void removeMana(float amount) {
@@ -734,6 +740,11 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
         }
         super.removeMana(amount);
         updateMana();
+    }
+    @Override
+    public void removeSecondaryMana(float amount) {
+        super.removeSecondaryMana(amount);
+        updateSecondaryMana();
     }
 
     @Override
@@ -912,6 +923,13 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                         .replace("$spell", spellTemplate.getName());
                     mage.sendMessage(message);
                 }
+                if (usesSecondaryMana()) {
+                    message = getMessage("secondary_mana_instructions", "")
+                            .replace("$wand", getName())
+                            .replace("$spell", spellTemplate.getName());
+                    mage.sendMessage(message);
+                }
+
             }
             if (spells.size() > 1)
             {
@@ -1540,6 +1558,7 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
             node.set("owner", null);
             node.set("template", null);
             node.set("mana_timestamp", null);
+            node.set("secondary_mana_timestamp", null);
             node.set("enchant_count", null);
         }
 
@@ -1704,6 +1723,7 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
         // This overrides the value loaded in CasterProperties
         if (!regenWhileInactive) {
             setProperty("mana_timestamp", System.currentTimeMillis());
+            setProperty("secondary_mana_timestamp", System.currentTimeMillis());
         }
 
         id = getString("id");
@@ -1739,6 +1759,15 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                 resetManaOnActivate = 0.0;
             } else if (!asString.equalsIgnoreCase("false")) {
                 resetManaOnActivate = getDouble("reset_mana_on_activate", 0);
+            }
+        }
+        resetSecondaryManaOnActivate = null;
+        if (hasProperty("reset_secondary_mana_on_activate")) {
+            String asString = getString("reset_secondary_mana_on_activate");
+            if (asString.equalsIgnoreCase("true")) {
+                resetSecondaryManaOnActivate = 0.0;
+            } else if (!asString.equalsIgnoreCase("false")) {
+                resetSecondaryManaOnActivate = getDouble("reset_secondary_mana_on_activate", 0);
             }
         }
 
@@ -2271,6 +2300,12 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                 ConfigurationUtils.addIfNotEmpty(getLevelString("mana_per_damage", manaPerDamage, controller.getMaxManaRegeneration()), lore);
             }
         }
+
+        if (usesSecondaryMana()) {
+            int secondaryManaMax = 500;
+            ConfigurationUtils.addIfNotEmpty(getLevelString("secondary_mana_amount", secondaryManaMax, controller.getMaxSecondaryMana()), lore);
+        }
+
         if (superPowered) {
             ConfigurationUtils.addIfNotEmpty(getMessage("super_powered"), lore);
         }
@@ -2477,6 +2512,11 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                             } else {
                                 ConfigurationUtils.addIfNotEmpty(getLevelString("mana_amount", manaMax, controller.getMaxMana()), lore);
                             }
+                        }
+                        break;
+                    case "$secondary_mana_max":
+                        if (usesSecondaryMana()) {
+                            ConfigurationUtils.addIfNotEmpty(getLevelString("secondary_mana_amount", 500, controller.getMaxSecondaryMana()), lore);
                         }
                         break;
                     case "$mana_regeneration":
@@ -4056,6 +4096,16 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                 updateDurability();
             }
         }
+        float secondaryMana = getSecondaryMana();
+        if (usesSecondaryMana()) {
+            if (manaMode.useGlow()) {
+                if (secondaryMana == 500) {
+                    CompatibilityUtils.addGlow(item);
+                } else {
+                    CompatibilityUtils.removeGlow(item);
+                }
+            }
+        }
 
         if (usesXPDisplay()) {
             int playerLevel = player.getLevel();
@@ -4415,6 +4465,12 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
             return false;
         }
         return super.tickMana();
+    }
+
+    @Override
+    public boolean tickSecondaryMana() {
+
+        return super.tickSecondaryMana();
     }
 
     @Override
@@ -4827,6 +4883,17 @@ public class Wand extends WandProperties implements CostReducer, com.elmakers.mi
                 setMana(newMana);
             }
             setProperty("mana_timestamp", System.currentTimeMillis());
+        }
+
+        if (resetSecondaryManaOnActivate != null) {
+            float newSecondaryMana = (float)(double)resetSecondaryManaOnActivate;
+            if (newSecondaryMana < 1) {
+                newSecondaryMana *= 500;
+            }
+            if (newSecondaryMana < getSecondaryMana()) {
+                setSecondaryMana(newSecondaryMana);
+            }
+            setProperty("secondary_mana_timestamp", System.currentTimeMillis());
         }
 
         // Check for auto-organize

@@ -64,6 +64,11 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         return (propertyType == null || propertyType == type);
     }
 
+    public boolean hasOwnSecondaryMana() {
+        MagicPropertyType propertyType = propertyRoutes.get("secondary_mana");
+        return (propertyType == null || propertyType == type);
+    }
+
     @Override
     public int getManaRegeneration() {
         ManaController manaController = controller.getManaController();
@@ -101,6 +106,22 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         setProperty("mana_max", Math.max(0, manaMax));
     }
 
+
+    @Override
+    public void setSecondaryMana(float secondaryMana) {
+        if (isCostFree()) {
+            setProperty("mana", null);
+        } else {
+            ManaController manaController = controller.getManaController();
+            if (manaController != null && isPlayer()) {
+                manaController.setSecondaryMana(getPlayer(), secondaryMana);
+                return;
+            }
+            setProperty("secondary_mana", Math.max(0, secondaryMana));
+        }
+    }
+
+
     @Override
     public void setManaRegeneration(int manaRegeneration) {
         setProperty("mana_regeneration", Math.max(0, manaRegeneration));
@@ -116,10 +137,29 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
     }
 
     @Override
+    public float getSecondaryMana() {
+        ManaController manaController = controller.getManaController();
+        if (manaController != null && isPlayer()) {
+            return manaController.getSecondaryMana(getPlayer());
+        }
+        return getFloat("secondary_mana", getFloat("xp"));
+    }
+
+    @Override
     public void removeMana(float amount) {
         ManaController manaController = controller.getManaController();
         if (manaController != null && isPlayer()) {
             manaController.removeMana(getPlayer(), amount);
+            return;
+        }
+        setMana(getMana() - amount);
+    }
+
+    @Override
+    public void removeSecondaryMana(float amount) {
+        ManaController manaController = controller.getManaController();
+        if (manaController != null && isPlayer()) {
+            manaController.removeSecondaryMana(getPlayer(), amount);
             return;
         }
         setMana(getMana() - amount);
@@ -190,9 +230,15 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         return (currentMana != effectiveManaMax || effectiveManaRegeneration != currentManaRegen);
     }
 
+
     public boolean usesMana() {
         if (isCostFree()) return false;
         return getManaMax() > 0;
+    }
+
+    public boolean usesSecondaryMana() {
+        if (isCostFree()) return false;
+        return getSecondaryMana() > 0;
     }
 
     public boolean tickMana() {
@@ -221,8 +267,22 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         return updated;
     }
 
+    public boolean tickSecondaryMana() {
+        boolean updated = false;
+        long now = System.currentTimeMillis();
+        if (usesSecondaryMana() && hasOwnSecondaryMana()) {
+            float secondaryMana = getSecondaryMana();
+            setSecondaryMana(Math.min(600, secondaryMana));
+            updated = true;
+            setProperty("secondary_mana_timestamp", now);
+        }
+
+        return updated;
+    }
+
     public void tick() {
         tickMana();
+        tickSecondaryMana();
     }
 
     @Override
@@ -417,6 +477,10 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
     }
 
     public void updateMana() {
+
+    }
+
+    public void updateSecondaryMana() {
 
     }
 
