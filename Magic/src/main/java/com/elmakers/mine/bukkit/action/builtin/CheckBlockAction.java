@@ -90,6 +90,48 @@ public class CheckBlockAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        MaterialBrush brush = context.getBrush();
+        Block block = sourceLocation.getBlock(context);
+        if (block == null) {
+            return false;
+        }
+        if (direction != null) {
+            for (int i = 0; i < directionCount; i++) {
+                block = block.getRelative(direction);
+            }
+        }
+        boolean isAllowed = false;
+        if (allowBrush) {
+            isAllowed = brush != null && !brush.isDifferent(block);
+        }
+        if (!isAllowed && allowed != null) {
+            isAllowed = allowed.testBlock(block);
+        }
+        if (!isAllowed && !allowBrush && allowed == null) {
+            isAllowed = true;
+            if (brush != null && brush.isErase()) {
+                if (!context.hasBreakPermission(block)) {
+                    isAllowed = false;
+                }
+            } else {
+                if (!context.hasBuildPermission(block)) {
+                    isAllowed = false;
+                }
+            }
+            if (!context.isDestructible(block)) {
+                isAllowed = false;
+            }
+        }
+
+        if (setTarget && isAllowed) {
+            createActionContext(context, context.getEntity(), null, context.getTargetEntity(), block.getLocation());
+        }
+
+        return isAllowed;
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

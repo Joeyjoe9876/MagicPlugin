@@ -113,11 +113,6 @@ public class SkillAPIManager implements ManaController, AttributeProvider, Requi
     }
 
     @Override
-    public int getMaxSecondaryMana(Player player) {
-        return 0;
-    }
-
-    @Override
     public void removeSecondaryMana(Player player, float amount) {
 
     }

@@ -49,6 +49,21 @@ public class CheckHealthAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Entity targetEntity = context.getTargetEntity();
+        if (targetEntity == null || !(targetEntity instanceof Damageable)) return false;
+        Damageable damageable = (Damageable)targetEntity;
+        double health = damageable.getHealth();
+        if (fullHealth && health < CompatibilityUtils.getMaxHealth(damageable)) return false;
+        if (percentages) {
+            health = 100.0 * health / CompatibilityUtils.getMaxHealth(damageable);
+        }
+        if (minHealth != null && health < minHealth) return false;
+        if (maxHealth != null && health > maxHealth) return false;
+        return true;
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

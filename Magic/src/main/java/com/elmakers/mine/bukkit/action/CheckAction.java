@@ -39,6 +39,12 @@ public abstract class CheckAction extends CompoundAction {
                 return startActions("fail");
             }
         }
+        if (!allowedSecondary) {
+            ActionHandler fail = getHandler("fail");
+            if (fail != null && fail.size() != 0) {
+                return startActions("fail");
+            }
+        }
         ActionHandler actions = getHandler("actions");
         if (actions == null || actions.size() == 0) {
             return allowed ? SpellResult.CAST : SpellResult.STOP;

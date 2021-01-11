@@ -40,4 +40,13 @@ public class CheckRequirementsAction extends CheckAction {
         }
         return message == null;
     }
+
+    @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        String message = context.getController().checkRequirements(context, requirements);
+        if (sendMessage && message != null) {
+            context.getMage().sendMessage(message);
+        }
+        return message == null;
+    }
 }

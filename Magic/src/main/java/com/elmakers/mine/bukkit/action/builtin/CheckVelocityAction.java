@@ -24,4 +24,12 @@ public class CheckVelocityAction extends CheckAction {
         if (Double.isFinite(minSpeed) && speed > minSpeed) return false;
         return true;
     }
+
+    @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        double speed = context.getMage().getVelocity().length();
+        if (Double.isFinite(maxSpeed) && speed > maxSpeed) return false;
+        if (Double.isFinite(minSpeed) && speed > minSpeed) return false;
+        return true;
+    }
 }

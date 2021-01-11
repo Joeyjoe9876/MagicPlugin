@@ -32,6 +32,14 @@ public class CheckInventoryAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Entity targetEntity = context.getTargetEntity();
+        if (targetEntity == null || !(targetEntity instanceof Player)) return false;
+        Mage mage = context.getController().getMage(targetEntity);
+        return mage.hasItem(item);
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

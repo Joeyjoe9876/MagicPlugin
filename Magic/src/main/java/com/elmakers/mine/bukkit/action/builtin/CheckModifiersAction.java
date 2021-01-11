@@ -51,6 +51,33 @@ public class CheckModifiersAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Entity targetEntity = context.getTargetEntity();
+        Mage mage = context.getController().getRegisteredMage(targetEntity);
+
+        if (blocked != null && mage != null) {
+            for (String check : blocked) {
+                if (mage.hasModifier(check)) {
+                    return false;
+                }
+            }
+        }
+
+        if (required != null) {
+            if (mage == null) {
+                return false;
+            }
+            for (String check : required) {
+                if (mage.hasModifier(check)) {
+                    return true;
+                }
+            }
+        }
+
+        return required == null || required.isEmpty();
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

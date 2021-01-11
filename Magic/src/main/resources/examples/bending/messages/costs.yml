@@ -2,5 +2,7 @@ costs:
     xp_amount: $amount XP
     mana_amount: $amount Energy
     mana: Energy
+    secondary_mana_amnout: $amount Magazines
+    seconadry_mana: Ammo
     xp: XP
 

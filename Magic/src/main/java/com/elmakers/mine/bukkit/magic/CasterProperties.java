@@ -107,7 +107,6 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
     }
 
 
-    @Override
     public void setSecondaryMana(float secondaryMana) {
         if (isCostFree()) {
             setProperty("mana", null);
@@ -136,7 +135,6 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         return getFloat("mana", getFloat("xp"));
     }
 
-    @Override
     public float getSecondaryMana() {
         ManaController manaController = controller.getManaController();
         if (manaController != null && isPlayer()) {
@@ -155,7 +153,6 @@ public abstract class CasterProperties extends BaseMagicConfigurable implements 
         setMana(getMana() - amount);
     }
 
-    @Override
     public void removeSecondaryMana(float amount) {
         ManaController manaController = controller.getManaController();
         if (manaController != null && isPlayer()) {

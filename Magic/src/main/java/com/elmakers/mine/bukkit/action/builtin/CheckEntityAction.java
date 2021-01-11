@@ -136,6 +136,46 @@ public class CheckEntityAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Entity targetEntity = context.getTargetEntity();
+        if (targetEntity == null) return false;
+        boolean isCaster = targetEntity == context.getEntity();
+        if (!allowCaster && isCaster) {
+            return false;
+        }
+        if (onlyCaster && !isCaster) {
+            return false;
+        }
+        if (onFire != null && onFire != (targetEntity.getFireTicks() > 0)) {
+            return false;
+        }
+        if (deniedTypes != null && deniedTypes.contains(targetEntity.getType())) {
+            return false;
+        }
+        if (deniedClasses != null) {
+            for (Class<? extends Entity> entityClass : deniedClasses) {
+                if (entityClass.isAssignableFrom(targetEntity.getClass())) {
+                    return false;
+                }
+            }
+        }
+
+        boolean anyAllowed = allowedTypes == null && allowedClasses == null;
+        if (!anyAllowed && allowedTypes != null) {
+            anyAllowed = allowedTypes.contains(targetEntity.getType());
+        }
+        if (!anyAllowed && allowedClasses != null) {
+            for (Class<? extends Entity> entityClass : allowedClasses) {
+                if (entityClass.isAssignableFrom(targetEntity.getClass())) {
+                    anyAllowed = true;
+                    break;
+                }
+            }
+        }
+        return anyAllowed;
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

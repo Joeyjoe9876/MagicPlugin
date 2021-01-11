@@ -33,6 +33,19 @@ public class CheckTriggerAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Long lastTrigger = context.getMage().getLastTrigger(trigger);
+        if (startTime == 0) {
+            startTime = context.getStartTime();
+        }
+        boolean isTriggered = (lastTrigger != null && lastTrigger > startTime);
+        if (isTriggered) {
+            startTime = System.currentTimeMillis();
+        }
+        return isTriggered;
+    }
+
+    @Override
     public void getParameterNames(Spell spell, Collection<String> parameters) {
         super.getParameterNames(spell, parameters);
         parameters.add("trigger");

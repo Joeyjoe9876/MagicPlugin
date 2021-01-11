@@ -40,4 +40,27 @@ public class TakeCostsAction extends CheckAction {
 
         return true;
     }
+
+    @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        if (costs == null) {
+            return true;
+        }
+        for (Cost cost : costs) {
+            if (!cost.has(context.getMage(), context.getWand(), null)) {
+                String baseMessage = context.getMessage("insufficient");
+                String costDescription = cost.getFullDescription(context.getController().getMessages(), null);
+                costDescription = baseMessage.replace("$cost", costDescription);
+                context.showMessage(costDescription);
+                return false;
+            }
+        }
+        if (costs != null) {
+            for (Cost cost : costs) {
+                cost.deduct(context.getMage(), context.getWand(), null);
+            }
+        }
+
+        return true;
+    }
 }

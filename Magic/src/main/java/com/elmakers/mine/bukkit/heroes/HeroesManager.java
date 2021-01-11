@@ -350,10 +350,6 @@ public class HeroesManager implements ManaController, AttributeProvider, TeamPro
         return 0;
     }
 
-    @Override
-    public int getMaxSecondaryMana(Player player) {
-        return 0;
-    }
 
     @Override
     public void removeSecondaryMana(Player player, float amount) {

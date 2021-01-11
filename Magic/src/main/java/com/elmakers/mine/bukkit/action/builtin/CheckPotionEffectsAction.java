@@ -70,6 +70,31 @@ public class CheckPotionEffectsAction extends CheckAction {
     }
 
     @Override
+    protected boolean isSecondaryAllowed(CastContext context) {
+        Entity targetEntity = context.getTargetEntity();
+        if (targetEntity == null || !(targetEntity instanceof LivingEntity)) return false;
+        LivingEntity living = (LivingEntity)targetEntity;
+
+        if (blocked != null) {
+            for (PotionEffectType check : blocked) {
+                if (living.hasPotionEffect(check)) {
+                    return false;
+                }
+            }
+        }
+
+        if (required != null) {
+            for (PotionEffectType check : required) {
+                if (living.hasPotionEffect(check)) {
+                    return true;
+                }
+            }
+        }
+
+        return required == null || required.isEmpty();
+    }
+
+    @Override
     public boolean requiresTarget() {
         return true;
     }

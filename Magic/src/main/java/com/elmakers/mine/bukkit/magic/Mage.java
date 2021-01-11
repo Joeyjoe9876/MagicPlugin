@@ -2948,7 +2948,7 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
     public float getMana() {
         return getActiveProperties().getMana();
     }
-
+    @Override
     public float getSecondaryMana() {
         return getActiveProperties().getSecondaryMana();
     }
@@ -2967,12 +2967,16 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
     public void setMana(float mana) {
         getActiveProperties().setMana(mana);
     }
+    @Override
+    public void setSecondaryMana(float secondaryMana) {
+        getActiveProperties().setSecondaryMana(secondaryMana);
+    }
 
     @Override
     public void updateMana() {
         getActiveProperties().updateMana();
     }
-
+    @Override
     public void updateSecondaryMana() {
         getActiveProperties().updateSecondaryMana();
     }
@@ -2990,6 +2994,10 @@ public class Mage implements CostReducer, com.elmakers.mine.bukkit.api.magic.Mag
     @Override
     public void removeMana(float mana) {
         getActiveProperties().removeMana(mana);
+    }
+    @Override
+    public void removeSecondaryMana(float secondaryMana) {
+        getActiveProperties().removeSecondaryMana(secondaryMana);
     }
 
     @Override
